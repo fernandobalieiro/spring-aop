@@ -1,13 +1,5 @@
 package com.baeldung.pointcutadvice;
 
-import com.baeldung.pointcutadvice.dao.FooDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Handler;
@@ -15,17 +7,25 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import com.baeldung.pointcutadvice.dao.FooDao;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration("/pointcutadvice/beans.xml")
-public class AopXmlConfigPerformanceIntegrationTest {
+class AopXmlConfigPerformanceIntegrationTest {
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         logEventHandler = new Handler() {
             @Override
             public void publish(LogRecord record) {
@@ -52,7 +52,7 @@ public class AopXmlConfigPerformanceIntegrationTest {
     private List<String> messages;
 
     @Test
-    public void givenPerformanceAspect_whenCallDaoMethod_thenPerformanceMeasurementAdviceIsCalled() {
+    void givenPerformanceAspect_whenCallDaoMethod_thenPerformanceMeasurementAdviceIsCalled() {
         Logger logger = Logger.getLogger(PerformanceAspect.class.getName());
         logger.addHandler(logEventHandler);
 

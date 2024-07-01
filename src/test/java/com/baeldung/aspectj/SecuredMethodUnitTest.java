@@ -1,10 +1,10 @@
 package com.baeldung.aspectj;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SecuredMethodUnitTest {
+class SecuredMethodUnitTest {
     @Test
-    public void testMethod() throws Exception {
+    void testMethod() throws Exception {
         SecuredMethod service = new SecuredMethod();
         service.unlockedMethod();
         service.lockedMethod();

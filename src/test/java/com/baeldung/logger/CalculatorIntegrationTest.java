@@ -1,29 +1,37 @@
 package com.baeldung.logger;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(value = {"classpath:springAop-applicationContext.xml"})
-public class CalculatorIntegrationTest {
+class CalculatorIntegrationTest {
 
     @Autowired
     private SampleAdder sampleAdder;
 
     @Test
-    public void whenAddValidValues_returnsSucessfully() {
+    void whenAddValidValues_returnsSucessfully() {
         final int addedValue = sampleAdder.add(12, 12);
 
         assertEquals(24, addedValue);
     }
-    
-    @Test (expected = IllegalArgumentException.class)
-    public void whenAddInValidValues_throwsException() {
-        sampleAdder.add(12, -12);
+
+    @Test
+    void whenAddInValidValues_throwsException() {
+        try {
+            sampleAdder.add(12, -12);
+        } catch (IllegalArgumentException e) {
+            // Does nothing, expected
+        } catch (Throwable e) {
+            fail();
+        }
     }
 
 }

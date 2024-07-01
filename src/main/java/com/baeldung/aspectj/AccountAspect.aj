@@ -12,7 +12,7 @@ public aspect AccountAspect {
 
     before(int amount, Account account) : callWithDraw(amount, account) {
         logger.info(" Balance before withdrawal: {}", account.balance);
-        logger.info(" Withdraw ammout: {}", amount);
+        logger.info(" Withdraw amount: {}", amount);
     }
 
     boolean around(int amount, Account account) : callWithDraw(amount, account) {

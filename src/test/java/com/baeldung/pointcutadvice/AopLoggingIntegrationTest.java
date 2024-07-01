@@ -1,15 +1,5 @@
 package com.baeldung.pointcutadvice;
 
-import com.baeldung.Application;
-import com.baeldung.pointcutadvice.dao.FooDao;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Handler;
@@ -17,17 +7,27 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import com.baeldung.Application;
+import com.baeldung.pointcutadvice.dao.FooDao;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {Application.class}, loader = AnnotationConfigContextLoader.class)
-public class AopLoggingIntegrationTest {
+class AopLoggingIntegrationTest {
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         messages = new ArrayList<>();
 
         logEventHandler = new Handler() {
@@ -57,7 +57,7 @@ public class AopLoggingIntegrationTest {
     private List<String> messages;
 
     @Test
-    public void givenLoggingAspect_whenCallDaoMethod_thenBeforeAdviceIsCalled() {
+    void givenLoggingAspect_whenCallDaoMethod_thenBeforeAdviceIsCalled() {
         dao.findById(1L);
         assertThat(messages, hasSize(1));
 
@@ -67,13 +67,13 @@ public class AopLoggingIntegrationTest {
     }
 
     @Test
-    public void givenLoggingAspect_whenCallLoggableAnnotatedMethod_thenMethodIsLogged() {
+    void givenLoggingAspect_whenCallLoggableAnnotatedMethod_thenMethodIsLogged() {
         dao.create(42L, "baz");
         assertThat(messages, hasItem("Executing method: create"));
     }
 
     @Test
-    public void givenLoggingAspect_whenCallMethodAcceptingAnnotatedArgument_thenArgumentIsLogged() {
+    void givenLoggingAspect_whenCallMethodAcceptingAnnotatedArgument_thenArgumentIsLogged() {
         Foo foo = new Foo(42L, "baz");
         dao.merge(foo);
         assertThat(messages, hasItem("Accepting beans with @Entity annotation: " + foo));
